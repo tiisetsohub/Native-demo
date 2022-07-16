@@ -1,26 +1,31 @@
 import { StyleSheet, Text, View, TextInput, Pressable, Alert } from 'react-native';
-import React, { useState } from 'react'
+import React, { useState, useReducer } from 'react'
+
+const reducer = (state, action)=> {
+  switch (action.type) {
+    case 'add':
+      return { count : state.count + 1, name : 'ADD'}
+    case 'minus':
+      return {...state, count: state.count - 1}
+    default:
+      return state
+  }
+}
 
 export default function App() {
-  const [name, setname] = useState('')
-  const [clicked,setclicked] = useState(false);
+  const [state, dispatch] = useReducer(reducer, {count: 0, name: 'add'});
 
-  const handlePress = () => {
-    setclicked(!clicked)
-  }
   return (
     <View style = {styles.body}>
-      <Text>Enter your name</Text>
-      <TextInput 
-      placeholder='name' 
-      style={styles.input} 
-      onChangeText={value => setname(value)}
-      keyboardType = 'number-pad'
-      />
-      <Pressable style = {styles.button} onPress={handlePress}>
-        <Text>Submit</Text>
-      </Pressable>
-      {clicked ? <Text>{name}</Text> : null}
+      <View style = {styles.mid}>
+        <Pressable style={styles.button} onPress={() => dispatch({type : 'minus'})}>
+          <Text>MINUS</Text>
+        </Pressable>
+        <Text style={styles.text}>{state.count}</Text>
+        <Pressable style={styles.button} onPress = {() => dispatch({type : 'add'})}>
+          <Text>{state.name}</Text>
+        </Pressable>
+      </View>
     </View>
   );
 }
@@ -32,13 +37,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  input: {
-    borderColor : '#000000',
-    borderWidth : 1,
-    margin : 10,
-    borderRadius : 2,
-    padding : 10,
-    width : 100,
+  mid: {
+    flexDirection : 'row'
+  },
+  text: {
+    width : 80,
+    fontSize : 20,
     textAlign : 'center',
   },
   button : {
