@@ -43,7 +43,7 @@ export default function App() {
       {state.map((item) => 
         {
           return (
-            <View style = {styles.thing}>
+            <View style = {styles.thing} key = {item.id}>
               <View style = {styles.leftthing}>
                 <Text>{item.name}</Text>
               </View>
